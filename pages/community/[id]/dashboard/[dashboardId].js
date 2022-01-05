@@ -6,10 +6,14 @@ import PropTypes from 'prop-types';
 import Image from "next/image";
 import Head from 'next/head';
 import React from 'react';
+import dynamic from "next/dynamic";
 import { useRouter } from 'next/router'
-
+const DashboardContainer = dynamic(() => import("../../../../components/PagesComponents/Community/DashboardContainer"), {
+    ssr: false,
+});
 import NavigationAll from "../../../../components/OtherComponents/Navigation/NavigationAll";
 
+//http://localhost:3000/community/1/dashboard/1
 
 const Dashboard = inject('rootStore', 'settingsStore', 'profileStore')(observer(({ rootStore, settingsStore, profileStore }) => {
     // console.log("router.query", router.query.id);
@@ -31,7 +35,7 @@ const Dashboard = inject('rootStore', 'settingsStore', 'profileStore')(observer(
                 </title>
             </Head>
             <NavigationAll>
-                
+                <DashboardContainer />
             </NavigationAll>
         </>
     );
