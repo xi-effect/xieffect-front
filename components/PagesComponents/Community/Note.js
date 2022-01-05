@@ -3,15 +3,12 @@ import { Image, Group, Text, Transformer, Path } from "react-konva";
 import { Html } from 'react-konva-utils';
 
 
-//TODO сделать клик вне блока, и чтобы окно редактирования закрывалось 
-
-//TODO запретить draggable stage, когда isEditText = true
-
-
+const selectOptions = [14, 15, 16, 30]
 
 export const Note = ({
   isSelected,
   onSelect,
+  onClickDeleteBtn,
   onChange,
   x,
   y,
@@ -20,23 +17,24 @@ export const Note = ({
   id,
   height,
   message,
-  textPosX,
-  textPosY,
+  contextPosY,
+  contextPosX,
+  isEditing,
+  fill,
 }) => {
   const shapeProps = {
-    width,
     x,
-    img,
     y,
-    height,
+    width,
+    img,
     id,
+    height,
     message,
-    textPosX,
-    textPosY,
+    contextPosY,
+    contextPosX,
+    isEditing,
+    fill,
   }
-
-  const [isEditText, setEditText] = React.useState(false)
-
 
   React.useEffect(() => {
     if (isSelected) {
@@ -51,12 +49,39 @@ export const Note = ({
 
   const [editedMessage, setEditedMessage] = React.useState("")
 
-  const [textAreaPos, setTextAreaPos] = React.useState({ x, y }) // editable textarea position
+  const [fontSize, setFontSize] = React.useState(14)
 
-  const handleEditText = (e) => {
-    const absPos = e.target.getAbsolutePosition(); // current shape absolute coordinate
-    setTextAreaPos(prev => prev = absPos)
-    setEditText(true)
+  const [color, setColor] = React.useState(fill)
+
+  const handleSetMessage = (e) => {
+    setEditedMessage(e.target.value)
+  }
+
+  const handleSetColor = (e) => {
+    setColor(e.target.value)
+    onChange({
+      ...shapeProps,
+      fill: color,
+    })
+  }
+
+  const handleDBclick = (e) => {
+    const absPos = e.target.getAbsolutePosition();
+    onChange({
+      ...shapeProps,
+      contextPosX: absPos.x,
+      contextPosY: absPos.y,
+      isEditing: true,
+    })
+  }
+
+  const handleKeyDown = (e, i) => {
+    if (e.keyCode === 13) {
+      onChange({
+        ...shapeProps,
+        isEditing: false
+      })
+    }
   }
 
   return (
@@ -68,13 +93,6 @@ export const Note = ({
         onClick={onSelect}
         onTap={onSelect}
         {...shapeProps}
-        // onDragEnd={(e) => {
-        //   onChange({
-        //     ...shapeProps,
-        //     x: e.target.x(),
-        //     y: e.target.y(),
-        //   });
-        // }} // драг по группе, не по картинке
         onTransform={(e) => {
           const node = shapeRef.current;
           const scaleX = node.scaleX();
@@ -96,16 +114,16 @@ export const Note = ({
         width={width}
         height={height}
         padding={30}
-        onDblClick={handleEditText} //?
+        onDblClick={handleDBclick}
         ellipsis
         fontFamily='Arial'
         align='center'
         // verticalAlign='middle'
         wrap='word'
-        text={isEditText ? "" : editedMessage}
+        text={isEditing ? "" : editedMessage}
         // text={editedMessage ? editedMessage : message}
         // fontSize={width / 4}
-        fontSize={30}
+        fontSize={+fontSize}
         //TODO адаптивный размер шрифта
         x={x}
         y={y}
@@ -135,7 +153,7 @@ export const Note = ({
         />
       )}
 
-      {/* {isSelected &&
+      {isEditing &&
         <Html
           divProps={{
             style: {
@@ -149,17 +167,29 @@ export const Note = ({
             width: width, height: 50, backgroundColor: "#fff", position: "absolute",
             borderRadius: 10,
             padding: 10,
-            top: textAreaPos.y - 80 + "px",
-            left: textAreaPos.x + "px"
+            top: contextPosY - 80 + "px",
+            left: contextPosX + "px"
           }}>
-            <button onClick={deleteNote}>
+            <button
+              style={{ marginRight: 10, fontSize: 15 }}
+              onClick={onClickDeleteBtn}>
               delete
             </button>
+            <span style={{ fontSize: 10 }}>font size - </span>
+            <select style={{ fontSize: 15 }} value={fontSize} onChange={(e) => setFontSize(e.target.value)}>
+              {selectOptions.map(x => (
+                <option>{x}</option>
+              ))}
+            </select>
+            <span style={{ fontSize: 10 }}>shape color -</span>
+            <input
+              onChange={handleSetColor}
+              type="color"
+            />
           </div>
         </Html>
-      } */}
-
-      {isEditText &&
+      }
+      {isEditing &&
         <Html
           divProps={{
             style: {
@@ -174,7 +204,7 @@ export const Note = ({
               fontFamily: "Arial",
               outline: "none",
               resize: "none",
-              fontSize: 30,
+              fontSize: +fontSize,
               lineHeight: 1,
               fontStyle: "normal",
               fontWeight: 400,
@@ -191,17 +221,13 @@ export const Note = ({
               height: height,
               backgroundColor: "transparent",
               position: "absolute",
-              top: textAreaPos.y + "px",
-              left: textAreaPos.x + "px"
+              top: contextPosY + "px",
+              left: contextPosX + "px"
             }}
             type="text"
             value={editedMessage}
-            onKeyDown={e => {
-              if (e.key === 'Enter') {
-                setEditText(false)
-              }
-            }}
-            onChange={e => setEditedMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onChange={handleSetMessage}
           />
         </Html>
       }

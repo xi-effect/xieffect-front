@@ -5,13 +5,13 @@ import {
 } from "mobx";
 
 class DashboardStore {
-  isEditing = false
+  shapes = []
+
 
   constructor(rootStore) {
     this.rootStore = rootStore;
     makeObservable(this, {
-      isEditing: observable,
-      setIsEditing: action
+      shapes: observable,
     });
   }
   

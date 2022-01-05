@@ -1,7 +1,6 @@
 import React from 'react'
 import { Stage, Layer, Rect, Image, Group } from "react-konva";
 import { Tools } from './Tools'
-import { Rectangle } from './Rectangle'
 import useImage from 'use-image';
 import { Note } from './Note';
 import { inject, observer } from 'mobx-react';
@@ -9,7 +8,9 @@ import { inject, observer } from 'mobx-react';
 
 //TODO сделать хоткей, чтобы при селекте шейпа и нажатии кнопки delete фигура удалялась
 
-const WIDTH = 300;  
+//TODO при клике вне селект шейпа, когда isEditing = true, сбрасывать на isEditing = false
+
+const WIDTH = 300;
 const HEIGHT = 300;
 
 let lastId = 0;
@@ -41,15 +42,15 @@ const DashboardContainer = inject('dashboardStore')(observer(({ dashboardStore }
 
   const [openColorMenu, setOpenColorMenu] = React.useState(false)
 
-  // const [isEditText, setEditText] = React.useState(false)
-
   const [color, setColor] = React.useState("")
 
+  //** Заготовка на кастомную фигуру стикера */
   // const svg = '<svg width="240" height="196" viewBox="0 0 240 196" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="240" height="174" fill="'+color+'"/><rect width="220" height="21.8557" transform="matrix(1 0 0 - 1 0 195.856)" fill="'+color+'"/><path d="M240 174H220V195.856L240 174Z" fill="#f3f3f3"/></svg>';
 
   // const encoded = window.btoa(svg);
 
   // const [image] = useImage(`data: image/svg+xml;base64,${encoded}`);
+  //** END */
 
   const [image] = useImage('https://i.ibb.co/m08rGsf/Rectangle.png');
 
@@ -80,18 +81,17 @@ const DashboardContainer = inject('dashboardStore')(observer(({ dashboardStore }
       setShapes(prev => {
         return [...prev,
         {
-          isDraggable: false,
+          id: newId(),
           x: xPos,
           y: yPos,
           height: 300,
           img: image,
           width: 300,
           message: "",
-          textPosX: xPos,
-          textPosY: yPos,
-          contextMenuPosX: xPos,
-          contextMenuPosY: yPos - 120,
-          id: newId()
+          isEditing: false,
+          contextPosY: 0,
+          contextPosX: 0,
+          fill: "",
         }
         ]
       })
@@ -105,11 +105,15 @@ const DashboardContainer = inject('dashboardStore')(observer(({ dashboardStore }
     }
   }
 
-  
-  const handleDeleteNote = () => {
-    setShapes(prev => prev.filter(x => x.id !== selectedId))
+  const handleOnChange = (newAttrs, i) => {
+    setShapes(prev => {
+      return prev.map((x, index) => index === i ? newAttrs : x)
+    });
   }
 
+  const onDeleteShape = () => {
+    setShapes(prev => prev.filter(x => x.id !== selectedId))
+  }
 
   return (
     <>
@@ -121,14 +125,14 @@ const DashboardContainer = inject('dashboardStore')(observer(({ dashboardStore }
       />
       <div className="canvas" style={{ cursor: openColorMenu ? "pointer" : "grab" }}>
         <Stage
-          width={window.innerWidth} 
+          width={window.innerWidth}
           onClick={createShape}
           height={window.innerHeight}
           x={stagePos.x}
           y={stagePos.y}
           onTouchStart={createShape}
           onMouseDown={checkOutsideClick}
-          draggable
+          draggable={shapes.every(x => !x.isEditing)}
           onDragEnd={setStagePosition}
         >
           <Layer>
@@ -141,12 +145,8 @@ const DashboardContainer = inject('dashboardStore')(observer(({ dashboardStore }
                 <Note
                   {...obj}
                   isSelected={obj.id === selectedId}
-                  deleteNote={handleDeleteNote}
-                  onChange={(newAttrs) => {
-                    setShapes(prev => {
-                      return prev.map((x, index) => index === i ? newAttrs : x)
-                    });
-                  }}
+                  onChange={(newAttrs) => handleOnChange(newAttrs, i)}
+                  onClickDeleteBtn={onDeleteShape}
                 />
               </Group>
             ))}
