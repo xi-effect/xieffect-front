@@ -4,37 +4,18 @@ import { Tools } from './Tools'
 import useImage from 'use-image';
 import { Note } from './Note';
 import { inject, observer } from 'mobx-react';
-
+import { generateRect } from './utils/generateRect';
+import { generateId } from './utils/generateId';
 
 //TODO сделать хоткей, чтобы при селекте шейпа и нажатии кнопки delete фигура удалялась
 
 //TODO при клике вне селект шейпа, когда isEditing = true, сбрасывать на isEditing = false
-
-const WIDTH = 300;
-const HEIGHT = 300;
-
-let lastId = 0;
-
-function newId(prefix = 'id') {
-  lastId++;
-  return `${prefix}${lastId}`;
-}
 
 const DashboardContainer = inject('dashboardStore')(observer(({ dashboardStore }) => {
 
   const store = dashboardStore
 
   const [stagePos, setStagePos] = React.useState({ x: 0, y: 0 });
-
-  const startX = Math.floor((-stagePos.x - window.innerWidth) / WIDTH) * WIDTH;
-
-  const endX = Math.floor((-stagePos.x + window.innerWidth * 2) / WIDTH) * WIDTH;
-
-  const startY = Math.floor((-stagePos.y - window.innerHeight) / HEIGHT) * HEIGHT;
-
-  const endY = Math.floor((-stagePos.y + window.innerHeight * 2) / HEIGHT) * HEIGHT;
-
-  const gridComponents = [];
 
   const [shapes, setShapes] = React.useState([])
 
@@ -54,20 +35,7 @@ const DashboardContainer = inject('dashboardStore')(observer(({ dashboardStore }
 
   const [image] = useImage('https://i.ibb.co/m08rGsf/Rectangle.png');
 
-  for (let x = startX; x < endX; x += WIDTH) {
-    for (let y = startY; y < endY; y += HEIGHT) {
-      gridComponents.push(
-        <Rect
-          x={x}
-          y={y}
-          width={WIDTH}
-          height={HEIGHT}
-          fill="#1111"
-          stroke="#424242"
-        />
-      );
-    }
-  }
+  const gridComponents = generateRect(stagePos)
 
   const setStagePosition = (e) => {
     setStagePos(e.currentTarget.position())
@@ -81,7 +49,7 @@ const DashboardContainer = inject('dashboardStore')(observer(({ dashboardStore }
       setShapes(prev => {
         return [...prev,
         {
-          id: newId(),
+          id: generateId(),
           x: xPos,
           y: yPos,
           height: 300,

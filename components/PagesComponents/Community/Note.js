@@ -117,6 +117,7 @@ export const Note = ({
         onDblClick={handleDBclick}
         ellipsis
         fontFamily='Arial'
+        id={id}
         align='center'
         // verticalAlign='middle'
         wrap='word'
