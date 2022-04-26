@@ -112,9 +112,9 @@ class CommunityChannelsSt {
             name: "Комната",
         },
         {
-            id: 2,
-            type: "chat",
-            name: "Чат",
+            id: 20,
+            type: "dashboard",
+            name: "Dashboard",
         },
         {
             id: 4,

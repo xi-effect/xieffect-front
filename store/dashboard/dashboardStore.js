@@ -1,11 +1,10 @@
 import {
-  action,
   observable,
   makeObservable,
 } from "mobx";
 
 class DashboardStore {
-  shapes = []
+  shapes = [];
 
 
   constructor(rootStore) {
@@ -18,4 +17,4 @@ class DashboardStore {
 }
 
 
-export default DashboardStore
+export default DashboardStore;

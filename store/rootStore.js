@@ -20,7 +20,7 @@ import CommunitiesMenuSt from "./community/communitiesMenuSt";
 import CommunityChannelsSt from "./community/communityChannelsSt";
 import CommunitiesInvitesSt from "./community/communitiesInvitesSt";
 import CommunitySettingsSt from "./community/communitySettingsSt";
-import DashboardStore from './dashboard/dashboardStore'
+import DashboardStore from "./dashboard/dashboardStore";
 
 
 enableStaticRendering(typeof window === "undefined");
@@ -47,7 +47,7 @@ class RootStore {
     this.communitiesInvitesSt = new CommunitiesInvitesSt(this);
     this.communitiesMenuSt = new CommunitiesMenuSt(this);
 
-    this.dashboardStore = new DashboardStore(this)
+    this.dashboardStore = new DashboardStore(this);
 
     this.socket = io('https://xieffect.ru:5000/', {
       autoConnect: false,

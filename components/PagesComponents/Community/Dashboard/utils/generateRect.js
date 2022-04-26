@@ -30,5 +30,5 @@ export const generateRect = (stagePos) => {
       );
     }
   }
-  return gridComponents
-}
+  return gridComponents;
+};

@@ -2,25 +2,15 @@ import { inject, observer } from "mobx-react";
 import Head from "next/head";
 import React from "react";
 import { useRouter } from "next/router";
-
+import dynamic from "next/dynamic";
 import Navigation from "components/OtherComponents/Navigation/Navigation";
 
-import Image from "next/image";
-import Head from 'next/head';
-import React from 'react';
-import dynamic from "next/dynamic";
-import { useRouter } from 'next/router'
-const DashboardContainer = dynamic(() => import("../../../../components/PagesComponents/Community/DashboardContainer"), {
+const DashboardContainer = dynamic(() => import("components/PagesComponents/Community/Dashboard/DashboardContainer"), {
     ssr: false,
 });
-import NavigationAll from "../../../../components/OtherComponents/Navigation/NavigationAll";
 
-//http://localhost:3000/community/1/dashboard/1
-
-const Dashboard = inject('rootStore', 'settingsStore', 'profileStore')(observer(({ rootStore, settingsStore, profileStore }) => {
-    // console.log("router.query", router.query.id);
-
-    const router = useRouter()
+const Dashboard = inject()(observer(() => {
+    const router = useRouter();
 
     React.useEffect(() => {
         if (router.query.id !== undefined) {
@@ -36,9 +26,9 @@ const Dashboard = inject('rootStore', 'settingsStore', 'profileStore')(observer(
                 </title>
                 <meta name="robots" content="noindex" />
             </Head>
-            <NavigationAll>
+            <Navigation>
                 <DashboardContainer />
-            </NavigationAll>
+            </Navigation>
         </>
     );
 }));

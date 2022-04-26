@@ -1,12 +1,13 @@
-import React from 'react'
+/* eslint-disable react/prop-types */
+import React from 'react';
 
 export const Tools = ({ openColorMenu, setOpenColorMenu, color, setColor }) => {
 
   const handleSelect = () => {
 
-    setOpenColorMenu(true)
+    setOpenColorMenu(true);
 
-  }
+  };
 
   return (
     <div className='tools' style={
@@ -23,6 +24,7 @@ export const Tools = ({ openColorMenu, setOpenColorMenu, color, setColor }) => {
       }
     }>
       <button onClick={handleSelect}
+        type="button"
         style={{
           backgroundColor: "transparent",
           outline: "none",
@@ -31,7 +33,7 @@ export const Tools = ({ openColorMenu, setOpenColorMenu, color, setColor }) => {
           width: "100%",
           margin: "0 auto"
         }}>
-        <img src="https://img.icons8.com/dotty/50/000000/note.png" />
+        <img alt="alt" src="https://img.icons8.com/dotty/50/000000/note.png" />
       </button>
       {openColorMenu &&
         <input
@@ -46,5 +48,5 @@ export const Tools = ({ openColorMenu, setOpenColorMenu, color, setColor }) => {
           type="color" value={color} onChange={e => setColor(e.target.value)} />
       }
     </div>
-  )
-}
+  );
+};

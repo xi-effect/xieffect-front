@@ -1,9 +1,10 @@
-import React from 'react'
-import { Image, Group, Text, Transformer, Path } from "react-konva";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import { Image, Text, Transformer } from "react-konva";
 import { Html } from 'react-konva-utils';
 
 
-const selectOptions = [14, 15, 16, 30]
+const selectOptions = [14, 15, 16, 30];
 
 export const Note = ({
   isSelected,
@@ -34,7 +35,7 @@ export const Note = ({
     contextPosX,
     isEditing,
     fill,
-  }
+  };
 
   React.useEffect(() => {
     if (isSelected) {
@@ -47,23 +48,23 @@ export const Note = ({
 
   const trRef = React.useRef();
 
-  const [editedMessage, setEditedMessage] = React.useState("")
+  const [editedMessage, setEditedMessage] = React.useState("");
 
-  const [fontSize, setFontSize] = React.useState(14)
+  const [fontSize, setFontSize] = React.useState(14);
 
-  const [color, setColor] = React.useState(fill)
+  const [color, setColor] = React.useState(fill);
 
   const handleSetMessage = (e) => {
-    setEditedMessage(e.target.value)
-  }
+    setEditedMessage(e.target.value);
+  };
 
   const handleSetColor = (e) => {
-    setColor(e.target.value)
+    setColor(e.target.value);
     onChange({
       ...shapeProps,
       fill: color,
-    })
-  }
+    });
+  };
 
   const handleDBclick = (e) => {
     const absPos = e.target.getAbsolutePosition();
@@ -72,17 +73,17 @@ export const Note = ({
       contextPosX: absPos.x,
       contextPosY: absPos.y,
       isEditing: true,
-    })
-  }
+    });
+  };
 
-  const handleKeyDown = (e, i) => {
+  const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       onChange({
         ...shapeProps,
         isEditing: false
-      })
+      });
     }
-  }
+  };
 
   return (
     <>
@@ -93,7 +94,7 @@ export const Note = ({
         onClick={onSelect}
         onTap={onSelect}
         {...shapeProps}
-        onTransform={(e) => {
+        onTransform={() => {
           const node = shapeRef.current;
           const scaleX = node.scaleX();
           const scaleY = node.scaleY();
@@ -125,7 +126,7 @@ export const Note = ({
         // text={editedMessage ? editedMessage : message}
         // fontSize={width / 4}
         fontSize={+fontSize}
-        //TODO адаптивный размер шрифта
+        // TODO адаптивный размер шрифта
         x={x}
         y={y}
       />
@@ -165,21 +166,23 @@ export const Note = ({
           }}
         >
           <div className="contextmenu" style={{
-            width: width, height: 50, backgroundColor: "#fff", position: "absolute",
+            width, height: 50, backgroundColor: "#fff", position: "absolute",
             borderRadius: 10,
             padding: 10,
-            top: contextPosY - 80 + "px",
-            left: contextPosX + "px"
+            top: `${contextPosY - 80}px`,
+            left: `${contextPosX}px`
           }}>
             <button
               style={{ marginRight: 10, fontSize: 15 }}
-              onClick={onClickDeleteBtn}>
+              onClick={onClickDeleteBtn}
+              type="button"
+            >
               delete
             </button>
             <span style={{ fontSize: 10 }}>font size - </span>
             <select style={{ fontSize: 15 }} value={fontSize} onChange={(e) => setFontSize(e.target.value)}>
-              {selectOptions.map(x => (
-                <option>{x}</option>
+              {selectOptions.map(x, i => (
+                <option key={i.toString()}>{x}</option>
               ))}
             </select>
             <span style={{ fontSize: 10 }}>shape color -</span>
@@ -218,12 +221,12 @@ export const Note = ({
               alignItems: "center",
               justifyContent: "center",
               textAlign: "center",
-              width: width,
-              height: height,
+              width,
+              height,
               backgroundColor: "transparent",
               position: "absolute",
-              top: contextPosY + "px",
-              left: contextPosX + "px"
+              top: `${contextPosY}px`,
+              left: `${contextPosX}px`
             }}
             type="text"
             value={editedMessage}
@@ -233,5 +236,5 @@ export const Note = ({
         </Html>
       }
     </>
-  )
-}
+  );
+};

@@ -1,9 +1,9 @@
 function id(prefix = 'id') {
   let lastId = 0;
   return function () {
-    lastId++;
+    lastId += 1;
     return `${prefix}${lastId}`;
-  }
+  };
 }
 
-export const generateId = id()
+export const generateId = id();
