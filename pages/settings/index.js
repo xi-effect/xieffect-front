@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import React from "react";
@@ -11,7 +11,6 @@ import {
   Box,
   Stack,
   Tooltip,
-  useTheme,
   Typography,
   AccordionDetails,
   Grid,
@@ -23,57 +22,49 @@ import SaveIcon from "@mui/icons-material/Save";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-import NavigationAll from "../../components/OtherComponents/Navigation/NavigationAll";
-import CustomAvatar from "../../components/OtherComponents/Avatar/CustomAvatar";
+import Navigation from "components/OtherComponents/Navigation/Navigation";
+import CustomAvatar from "components/OtherComponents/Avatar/CustomAvatar";
 
-import Secure from "./../../components/PagesComponents/Settings/Secure";
-
-import { useSnackbar } from 'notistack';
+import Secure from "components/PagesComponents/Settings/Secure";
 
 const Invite = dynamic(() =>
-  import("./../../components/PagesComponents/Settings/Invite")
-);
-
-const Customize = dynamic(() =>
-  import("./../../components/PagesComponents/Settings/Customize")
+  import("components/PagesComponents/Settings/Invite")
 );
 
 const UserAvatar = dynamic(() =>
-  import("../../components/PagesComponents/Settings/UserAvatar")
+  import("components/PagesComponents/Settings/UserAvatar")
 );
 
 const Settings = inject(
   "rootStore",
-  "settingsStore",
-  "messageStore"
+  "userSt",
 )(
-  observer(({ rootStore, settingsStore, messageStore }) => {
-    const theme = useTheme()
-    const mobile = useMediaQuery((theme) => theme.breakpoints.down("xl"))
-    const router = useRouter()
+  observer(({ rootStore, userSt }) => {
+    const mobile = useMediaQuery((theme) => theme.breakpoints.down("xl"));
+    const router = useRouter();
 
     React.useEffect(() => {
       rootStore
-        .fetchDataScr(`${rootStore.url}/settings/main/`, "GET")
+        .fetchData(`${rootStore.url}/settings/main/`, "GET")
         .then((data) => {
           if (data) {
-            console.log("settings/main", data)
-            settingsStore.setSettings("darkTheme", data["dark-theme"])
-            settingsStore.setSettings("id", data.id)
-            settingsStore.setSettings("username", data.username)
+            console.log("settings/main", data);
+            userSt.setSettings("darkTheme", data["dark-theme"]);
+            userSt.setSettings("id", data.id);
+            userSt.setSettings("username", data.username);
           }
         });
       rootStore
-        .fetchDataScr(`${rootStore.url}/settings/`, "GET")
+        .fetchData(`${rootStore.url}/settings/`, "GET")
         .then((data) => {
           if (data) {
             console.log("settings", data);
-            let emailArr = data.email.split("@", 2)
-            settingsStore.setSettings("emailBefore", emailArr[0])
-            settingsStore.setSettings("emailAfter", "@" + emailArr[1])
-            settingsStore.setSettings("emailConfirmed", data["email-confirmed"])
-            settingsStore.setSettings("avatar", data["avatar"])
-            settingsStore.setSettings("invite", data.code)
+            const emailArr = data.email.split("@", 2);
+            userSt.setSettings("emailBefore", emailArr[0]);
+            userSt.setSettings("emailAfter", `@${emailArr[1]}`);
+            userSt.setSettings("emailConfirmed", data["email-confirmed"]);
+            userSt.setSettings("avatar", data.avatar);
+            userSt.setSettings("invite", data.code);
           }
         });
     }, []);
@@ -85,16 +76,16 @@ const Settings = inject(
     };
 
     React.useEffect(() => {
-      console.log("query", router.query)
-      if (router.query.option && (router.query.option === 'secure' || router.query.option === 'useravatar' || router.query.option === 'customize' || router.query.option === 'invite')) setExpanded(router.query.option)
-    }, [router.query])
+      if (router.query.option && (router.query.option === "secure" || router.query.option === "useravatar" || router.query.option === "customize" || router.query.option === "invite")) setExpanded(router.query.option);
+    }, [router.query]);
 
     return (
       <>
         <Head>
-          <title>Ξffect</title>
+          <title>Ξffect | Настройки</title>
+          <meta name="robots" content="noindex" />
         </Head>
-        <NavigationAll>
+        <Navigation>
           <Box sx={{ width: "100%" }}>
             <Grid
               container
@@ -120,7 +111,7 @@ const Settings = inject(
               >
                 <Box sx={{ height: 290, width: 290 }}>
                   <CustomAvatar
-                    avatar={{ ...settingsStore.settings.avatar, bgcolor: null }}
+                    avatar={{ ...userSt.settings.avatar, bgcolor: null }}
                     viewBox={{
                       x: "-175",
                       y: "-100",
@@ -132,7 +123,7 @@ const Settings = inject(
                 {!mobile && (
                   <Button
                     sx={{ ml: "auto", mr: 1, mb: 1.2 }}
-                    onClick={() => settingsStore.saveNewSettimgs()}
+                    onClick={() => userSt.saveNewSettimgs()}
                     color="inherit"
                   >
                     Сохранить изменения
@@ -142,7 +133,7 @@ const Settings = inject(
                   <Tooltip title="Сохранить изменения">
                     <IconButton
                       sx={{ ml: "auto", mr: 1, mb: 1 }}
-                      onClick={() => settingsStore.saveNewSettimgs()}
+                      onClick={() => userSt.saveNewSettimgs()}
                       color="inherit"
                     >
                       <SaveIcon />
@@ -152,7 +143,7 @@ const Settings = inject(
                 <Tooltip title="Выйти">
                   <IconButton
                     sx={{ m: 1 }}
-                    onClick={() => settingsStore.logout()}
+                    onClick={() => userSt.logout()}
                     color="error"
                   >
                     <LogoutIcon />
@@ -167,8 +158,8 @@ const Settings = inject(
               >
                 <Accordion
                   sx={{ width: "100%", backgroundColor: "primary.dark" }}
-                  expanded={expanded === 'secure'}
-                  onChange={handleChange('secure')}
+                  expanded={expanded === "secure"}
+                  onChange={handleChange("secure")}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -183,8 +174,8 @@ const Settings = inject(
                 </Accordion>
                 <Accordion
                   sx={{ width: "100%", backgroundColor: "primary.dark" }}
-                  expanded={expanded === 'useravatar'}
-                  onChange={handleChange('useravatar')}
+                  expanded={expanded === "useravatar"}
+                  onChange={handleChange("useravatar")}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -199,8 +190,8 @@ const Settings = inject(
                 </Accordion>
                 <Accordion
                   sx={{ width: "100%", backgroundColor: "primary.dark" }}
-                  expanded={expanded === 'customize'}
-                  onChange={handleChange('customize')}
+                  expanded={expanded === "customize"}
+                  onChange={handleChange("customize")}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -215,8 +206,8 @@ const Settings = inject(
                 </Accordion>
                 <Accordion
                   sx={{ width: "100%", backgroundColor: "primary.dark" }}
-                  expanded={expanded === 'invite'}
-                  onChange={handleChange('invite')}
+                  expanded={expanded === "invite"}
+                  onChange={handleChange("invite")}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -232,7 +223,7 @@ const Settings = inject(
               </Grid>
             </Grid>
           </Box>
-        </NavigationAll>
+        </Navigation>
       </>
     );
   })

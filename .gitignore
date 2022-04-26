@@ -32,3 +32,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# IntellijIdea files
+*.iml
+.idea
+public/sw.js.map

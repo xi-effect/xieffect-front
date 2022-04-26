@@ -1,45 +1,40 @@
-import React, { useState } from 'react'
+import React from "react";
 
-import { Grid, FormControl, useTheme, InputLabel, TextField, OutlinedInput, FormControlLabel, Switch, AppBar, Tabs, Tab, Typography, Box, Button } from '@mui/material'
-import { inject, observer } from 'mobx-react'
-import DarkModeToggle from "react-dark-mode-toggle"
+import { Grid, Typography, } from "@mui/material";
+import { inject, observer } from "mobx-react";
+import DarkModeToggle from "react-dark-mode-toggle";
 
-const Customize = inject('rootStore', 'settingsStore')(observer(({ rootStore, settingsStore }) => {
-    const theme = useTheme()
-
-    // const [isDarkMode, setIsDarkMode] = useState(() => false);
-    // const { enqueueSnackbar } = useSnackbar();
-
+const Customize = inject("rootStore", "userSt")(observer(({ rootStore, userSt }) => {
     const saveNewTheme = () => {
-        rootStore.fetchDataScr(`${rootStore.url}/settings/`, "POST", {
-            "changed": { "dark-theme": !settingsStore.settings.darkTheme }
+        rootStore.fetchData(`${rootStore.url}/settings/`, "POST", {
+            "changed": { "dark-theme": !userSt.settings.darkTheme }
         })
             .then((data) => {
-                console.log(data)
+                console.log(data);
                 if (data.a) {
-                    settingsStore.setSettings("darkTheme", !settingsStore.settings.darkTheme)
-                    // enqueueSnackbar('Успешно', {
-                    //     variant: 'success',
+                    userSt.setSettings("darkTheme", !userSt.settings.darkTheme);
+                    // enqueueSnackbar("Успешно", {
+                    //     variant: "success",
 
                     // });
                 } else {
-                    // enqueueSnackbar('Ошибка', {
-                    //     variant: 'error',
+                    // enqueueSnackbar("Ошибка", {
+                    //     variant: "error",
                     // });
                 }
-            })
-    }
+            });
+    };
 
     return (
         <Grid spacing={1} container sx={{
-            width: '100%',
-            height: 'auto',
+            width: "100%",
+            height: "auto",
         }}>
             <Grid item container direction="row" sx={{ m: 1, }}>
                 <Grid>
                     <DarkModeToggle
                         onChange={saveNewTheme}
-                        checked={settingsStore.settings.darkTheme}
+                        checked={userSt.settings.darkTheme}
                         size={80}
                     />
                 </Grid>
@@ -49,6 +44,6 @@ const Customize = inject('rootStore', 'settingsStore')(observer(({ rootStore, se
             </Grid>
         </Grid>
     );
-}))
+}));
 
-export default Customize
+export default Customize;

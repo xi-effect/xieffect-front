@@ -1,15 +1,15 @@
-import { Button, Grid, Tab, Tabs, Typography, Stack, Box, Divider, useTheme, Avatar } from '@mui/material';
+import { Tab, Tabs, Typography, Stack, Box } from "@mui/material";
 
-import { inject, observer } from 'mobx-react';
-import PropTypes from 'prop-types';
+import { inject, observer } from "mobx-react";
+import PropTypes from "prop-types";
 
 import Image from "next/image";
-import Head from 'next/head';
-import React from 'react';
-import { useRouter } from 'next/router'
+import Head from "next/head";
+import React from "react";
+// import { useRouter } from "next/router"
 
-import CustomAvatar from '../../components/OtherComponents/Avatar/CustomAvatar';
-import NavigationAll from "../../components/OtherComponents/Navigation/NavigationAll";
+// import CustomAvatar from "components/OtherComponents/Avatar/CustomAvatar";
+import Navigation from "components/OtherComponents/Navigation/Navigation";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -21,21 +21,17 @@ function TabPanel(props) {
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
             sx={{
-                width: '100%'
+                width: "100%"
             }}
             {...other}
         >
-            {value === index && (
-                <>
-                    {children}
-                </>
-            )}
+            {value === index && children}
         </Box>
     );
 }
 
 TabPanel.propTypes = {
-    children: PropTypes.node,
+    children: PropTypes.node.isRequired,
     index: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
 };
@@ -43,21 +39,19 @@ TabPanel.propTypes = {
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
+        "aria-controls": `simple-tabpanel-${index}`,
     };
 }
 
 
-const Profile = inject('rootStore', 'settingsStore', 'profileStore')(observer(({ rootStore, settingsStore, profileStore }) => {
-    // console.log("router.query", router.query.id);
-
-    const router = useRouter()
-
-    React.useEffect(() => {
-        if (router.query.id !== undefined) {
-            profileStore.loadUserInfo(router.query.id)
-        }
-    }, [router.query.id]);
+const Profile = inject("userSt")(observer(({ userSt }) => {
+    // const router = useRouter()
+    console.log(userSt);
+    // React.useEffect(() => {
+    //     if (router.query.id !== undefined) {
+    //         userSt.loadUserInfo(router.query.id)
+    //     }
+    // }, [userSt, router.query.id]);
 
     const [value, setValue] = React.useState(0);
 
@@ -69,10 +63,11 @@ const Profile = inject('rootStore', 'settingsStore', 'profileStore')(observer(({
         <>
             <Head>
                 <title>
-                    Ξffect
+                    Ξffect | Профиль
                 </title>
+                <meta name="robots" content="noindex" />
             </Head>
-            <NavigationAll>
+            <Navigation>
                 <Stack
                     direction="column"
                     justifyContent="flex-start"
@@ -89,12 +84,12 @@ const Profile = inject('rootStore', 'settingsStore', 'profileStore')(observer(({
                         spacing={2}
                         sx={{
                             height: "300px",
-                            width: '100%',
+                            width: "100%",
                         }}
                     >
-                        <Box sx={{ height: 290, width: 290, }}>
-                            <CustomAvatar avatar={{ ...settingsStore.settings.avatar, bgcolor: null }} viewBox={{ x: '-175', y: '-100', width: '1256', height: '1256' }} />
-                        </Box>
+                        {/* <Box sx={{ height: 290, width: 290, }}>
+                            <CustomAvatar avatar={{ ...userSt.settings.avatar, bgcolor: null }} viewBox={{ x: "-175", y: "-100", width: "1256", height: "1256" }} />
+                        </Box> */}
                         <Stack
                             direction="column"
                             justifyContent="flex-start"
@@ -102,15 +97,15 @@ const Profile = inject('rootStore', 'settingsStore', 'profileStore')(observer(({
                             spacing={2}
                             sx={{ pt: 4 }}
                         >
-                            {profileStore?.user?.name && <Typography sx={{ cursor: 'default' }} variant="h5">
-                                {profileStore.user.name}
+                            {/* {userSt?.user?.name && <Typography sx={{ cursor: "default" }} variant="h5">
+                                {userSt.user.name}
                             </Typography>}
-                            {profileStore?.user?.surname && <Typography sx={{ cursor: 'default' }} variant="h5">
-                                {profileStore.user.surname}
+                            {userSt?.user?.surname && <Typography sx={{ cursor: "default" }} variant="h5">
+                                {userSt.user.surname}
                             </Typography>}
-                            {profileStore?.user?.username && <Typography sx={{ cursor: 'default' }} variant="h5">
-                                {profileStore.user.username}
-                            </Typography>}
+                            {userSt?.user?.username && <Typography sx={{ cursor: "default" }} variant="h5">
+                                {userSt.user.username}
+                            </Typography>} */}
                         </Stack>
                     </Stack>
                     <Stack
@@ -119,10 +114,10 @@ const Profile = inject('rootStore', 'settingsStore', 'profileStore')(observer(({
                         alignItems="flex-start"
                         spacing={2}
                         sx={{
-                            width: '100%',
+                            width: "100%",
                         }}
                     >
-                        <Box sx={{ borderBottom: 1, width: '100%', borderColor: 'divider' }}>
+                        <Box sx={{ borderBottom: 1, width: "100%", borderColor: "divider" }}>
                             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                                 <Tab label="Профиль" {...a11yProps(0)} />
                                 <Tab label="Сообщества" {...a11yProps(1)} />
@@ -135,11 +130,11 @@ const Profile = inject('rootStore', 'settingsStore', 'profileStore')(observer(({
                                 justifyContent="center"
                                 alignItems="center"
                                 spacing={2}
-                                sx={{ width: '100%', minHeight: 300 }}
+                                sx={{ width: "100%", minHeight: 300 }}
                             >
                                 <Image
                                     alt="alt"
-                                    src={"/app/NoData.svg"}
+                                    src="/assets/app/NoData.svg"
                                     quality={100}
                                     width={256}
                                     height={232}
@@ -155,11 +150,11 @@ const Profile = inject('rootStore', 'settingsStore', 'profileStore')(observer(({
                                 justifyContent="center"
                                 alignItems="center"
                                 spacing={2}
-                                sx={{ width: '100%', minHeight: 300 }}
+                                sx={{ width: "100%", minHeight: 300 }}
                             >
                                 <Image
                                     alt="alt"
-                                    src={"/app/NoData.svg"}
+                                    src="/assets/app/NoData.svg"
                                     quality={100}
                                     width={256}
                                     height={232}
@@ -175,11 +170,11 @@ const Profile = inject('rootStore', 'settingsStore', 'profileStore')(observer(({
                                 justifyContent="center"
                                 alignItems="center"
                                 spacing={2}
-                                sx={{ width: '100%', minHeight: 300 }}
+                                sx={{ width: "100%", minHeight: 300 }}
                             >
                                 <Image
                                     alt="alt"
-                                    src={"/app/NoData.svg"}
+                                    src="/assets/app/NoData.svg"
                                     quality={100}
                                     width={256}
                                     height={232}
@@ -191,9 +186,9 @@ const Profile = inject('rootStore', 'settingsStore', 'profileStore')(observer(({
                         </TabPanel>
                     </Stack>
                 </Stack>
-            </NavigationAll>
+            </Navigation>
         </>
     );
-}))
+}));
 
-export default Profile
+export default Profile;

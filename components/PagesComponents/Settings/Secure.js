@@ -1,38 +1,32 @@
-import React, { useState } from "react";
-
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from "react";
 import {
-    FormControl,
     Stack,
     Typography,
-    Box,
     Button,
     Link,
-    IconButton,
 } from "@mui/material";
-import InputAdornment from "@mui/material/InputAdornment";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import { inject, observer } from "mobx-react";
 
-import DialogChangeEmail from './Secure/DialogChangeEmail';
-import DialogChangePassword from './Secure/DialogChangePassword';
+import DialogChangeEmail from "./Secure/DialogChangeEmail";
+import DialogChangePassword from "./Secure/DialogChangePassword";
 
 const Secure = inject(
-    "rootStore",
-    "settingsStore"
+    "userSt"
 )(
-    observer(({ rootStore, settingsStore }) => {
-        const [hiddenEmail, setHiddenEmail] = React.useState(true)
+    observer(({ userSt }) => {
+        const [hiddenEmail, setHiddenEmail] = React.useState(true);
 
-        const [openEmailChangeDialog, setOpenEmailChangeDialog] = React.useState(false)
-        const [openPasswordChangeDialog, setOpenPasswordChangeDialog] = React.useState(false)
+        const [openEmailChangeDialog, setOpenEmailChangeDialog] = React.useState(false);
+        const [openPasswordChangeDialog, setOpenPasswordChangeDialog] = React.useState(false);
 
         const getStars = () => {
-            if (settingsStore.settings.emailBefore) {
-                return "*".repeat(settingsStore.settings.emailBefore.length)
+            if (userSt.settings.emailBefore) {
+                return "*".repeat(userSt.settings.emailBefore.length);
             }
-            return "****"
-        }
+            return "****";
+        };
 
         return (
             <Stack
@@ -48,11 +42,11 @@ const Secure = inject(
                     spacing={0}
                 >
                     <Typography sx={{ mr: 0.5 }}> почта - </Typography>
-                    {!hiddenEmail && <Typography > {settingsStore.settings.emailBefore} </Typography>}
+                    {!hiddenEmail && <Typography > {userSt.settings.emailBefore} </Typography>}
                     {hiddenEmail && <Typography > {getStars()} </Typography>}
-                    <Typography > {settingsStore.settings.emailAfter} </Typography>
-                    {hiddenEmail && <Link sx={{ color: 'text.primary', cursor: 'pointer', pl: 1 }} onClick={() => setHiddenEmail(false)}> показать </Link>}
-                    {!hiddenEmail && <Link sx={{ color: 'text.primary', cursor: 'pointer', pl: 1 }} onClick={() => setHiddenEmail(true)}> скрыть </Link>}
+                    <Typography > {userSt.settings.emailAfter} </Typography>
+                    {hiddenEmail && <Link sx={{ color: "text.primary", cursor: "pointer", pl: 1 }} onClick={() => setHiddenEmail(false)}> показать </Link>}
+                    {!hiddenEmail && <Link sx={{ color: "text.primary", cursor: "pointer", pl: 1 }} onClick={() => setHiddenEmail(true)}> скрыть </Link>}
                 </Stack>
                 <Stack
                     direction="row"

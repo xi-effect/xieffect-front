@@ -1,8 +1,7 @@
-import * as React from 'react';
-// eslint-disable-next-line @next/next/no-document-import-in-page
-import Document, { Html, Head, Main, NextScript } from 'next/document';
-import createEmotionServer from '@emotion/server/create-instance';
-import createEmotionCache from '../store/createEmotionCache';
+import * as React from "react";
+import Document, { Html, Head, Main, NextScript } from "next/document";
+import createEmotionServer from "@emotion/server/create-instance";
+import createEmotionCache from "../store/createEmotionCache";
 
 export default class MyDocument extends Document {
   render() {
@@ -15,19 +14,6 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
-          <meta name="Keywords" content="Образованиие, Эффект, Кси Эффект, Xi Effect, Effect" />
-          <meta name="yandex-verification" content="42187efe6d19061b" />
-          <meta name="google-site-verification" content="Z9F9qlZZKDIV30WIUVOkQOJa89Nbg9bOiqUaZz-XJiY" />
-          <meta
-            name="description"
-            content="Всё, что нужно для вашего Образования."
-          />
-          <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-          <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-          <link rel="manifest" href="/site.webmanifest" />
-          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
           <link
             href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap"
             rel="stylesheet"
@@ -36,9 +22,34 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
           <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@700&display=swap" rel="stylesheet" />
-          <meta name="msapplication-TileColor" content="#603cba" />
-          <meta name="theme-color" content="#ffffff" />
 
+          <meta charSet="utf-8" />
+          <meta name="Keywords" content="Образованиие, Эффект, Кси Эффект, Xi Effect, Effect" />
+          <meta name="yandex-verification" content="42187efe6d19061b" />
+          <meta name="google-site-verification" content="VAN7yVAfRqd5NWFpUJlz0MVL1wcv0mdhDY-16-d48-U" />
+          <meta
+            name="description"
+            content="Всё, что нужно для вашего Образования"
+          />
+
+          <meta name='application-name' content="\u039effect" />
+          <meta name='apple-mobile-web-app-capable' content='yes' />
+          <meta name='apple-mobile-web-app-status-bar-style' content='default' />
+          <meta name='apple-mobile-web-app-title' content='\u039effect' />
+          <meta name='mobile-web-app-capable' content='yes' />
+          <meta name='msapplication-config' content='/browserconfig.xml' />
+          <meta name="format-detection" content="telephone=no" />
+          <meta name="format-detection" content="address=no" />
+
+          <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#5d74a6" />
+          <meta name="msapplication-TileColor" content="#5d74a6" />
+          <meta name='msapplication-tap-highlight' content='no' />
+          <meta name="theme-color" content="#5d74a6" />
+          {this.props.emotionStyleTags}
         </Head>
         <body>
           <Main />
@@ -50,7 +61,7 @@ export default class MyDocument extends Document {
 }
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
-// it's compatible with server-side generation (SSG).
+// it"s compatible with server-side generation (SSG).
 MyDocument.getInitialProps = async (ctx) => {
   // Resolution order
   //
@@ -84,7 +95,9 @@ MyDocument.getInitialProps = async (ctx) => {
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (App) => (props) => <App emotionCache={cache} {...props} />,
+      enhanceApp: (App) => function (props) {
+        return <App emotionCache={cache} {...props} />;
+      },
     });
 
   const initialProps = await Document.getInitialProps(ctx);
@@ -93,7 +106,7 @@ MyDocument.getInitialProps = async (ctx) => {
   const emotionStyles = extractCriticalToChunks(initialProps.html);
   const emotionStyleTags = emotionStyles.styles.map((style) => (
     <style
-      data-emotion={`${style.key} ${style.ids.join(' ')}`}
+      data-emotion={`${style.key} ${style.ids.join(" ")}`}
       key={style.key}
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: style.css }}
@@ -102,7 +115,6 @@ MyDocument.getInitialProps = async (ctx) => {
 
   return {
     ...initialProps,
-    // Styles fragment is rendered after the app and page rendering finish.
-    styles: [...React.Children.toArray(initialProps.styles), ...emotionStyleTags],
+    emotionStyleTags,
   };
 };

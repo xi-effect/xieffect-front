@@ -1,24 +1,21 @@
-import React from 'react';
-import { useRouter } from 'next/router'
+import React from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
-import { motion } from "framer-motion"
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { Stack, useMediaQuery, Link, Button, Grid, Box, Paper, useTheme, Typography } from '@mui/material';
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Stack, useMediaQuery, Button, Grid, Box, Paper, Typography } from "@mui/material";
 
-import { labels } from '../../../texts/landing/MainLabel';
+import { labels } from "../../../texts/landing/MainLabel";
 
-const MainLabel = () => {
-    const theme = useTheme();
-
-    const router = useRouter()
-    const mobile = useMediaQuery(theme => theme.breakpoints.down('dl'));
+function MainLabel() {
+    const router = useRouter();
+    const mobile = useMediaQuery(theme => theme.breakpoints.down("dl"));
 
 
     return (
         <Box
             sx={{
-                position: 'relative',
-                width: 'calc(100% - 64px)',
+                position: "relative",
+                width: "calc(100% - 64px)",
             }}
         >
             <Paper
@@ -26,13 +23,12 @@ const MainLabel = () => {
                 sx={{
                     zIndex: 10,
                     mt: "20px",
-                    width: mobile ? 'calc(100% - 0px)' : 'calc(100% - 200px)',
+                    width: mobile ? "calc(100% - 0px)" : "calc(100% - 200px)",
                     ml: mobile ? "0px" : "100px",
                     mr: mobile ? "0px" : "100px",
                     bgcolor: "grey.400",
                     borderRadius: "20px",
-                    // minHeight: '500px',
-                    position: 'relative',
+                    position: "relative",
                 }}
             >
                 <Stack
@@ -44,27 +40,26 @@ const MainLabel = () => {
                     }}
                 >
                     <Typography
-                        // component={"h1"}
                         variant="OpenSans700MainLabel"
                         sx={{
-                            '&.MuiTypography-root': {
-                                cursor: 'default',
-                                color: '#272731',
-                                textAlign: 'center',
+                            "&.MuiTypography-root": {
+                                cursor: "default",
+                                color: "#272731",
+                                textAlign: "center",
                                 p: 2,
 
                             },
                             fontSize: {
-                                xs: '28px',
-                                sm: '36px',
-                                md: '44px',
-                                lg: '60px',
+                                xs: "28px",
+                                sm: "36px",
+                                md: "44px",
+                                lg: "60px",
                             },
                             lineHeight: {
-                                xs: '44px',
-                                sm: '44px',
-                                md: '71px',
-                                lg: '71px',
+                                xs: "44px",
+                                sm: "44px",
+                                md: "71px",
+                                lg: "71px",
                             },
                             mt: "20px",
                         }}
@@ -72,18 +67,17 @@ const MainLabel = () => {
                         {labels.title}
                     </Typography>
                     <Typography
-                        // component={"h2"}
                         variant="OpenSans500MainLabel"
                         sx={{
-                            cursor: 'default',
-                            color: '#555569',
-                            textAlign: 'center',
+                            cursor: "default",
+                            color: "#555569",
+                            textAlign: "center",
                             p: 2,
                             fontSize: {
-                                xs: '16px',
-                                sm: '18px',
-                                md: '20px',
-                                lg: '22px',
+                                xs: "16px",
+                                sm: "18px",
+                                md: "20px",
+                                lg: "22px",
                             },
                         }}
                     >
@@ -95,7 +89,7 @@ const MainLabel = () => {
                         justifyContent="space-between"
                         alignItems="center"
                         sx={{
-                            width: '100%',
+                            width: "100%",
                         }}
                     >
                         <Grid
@@ -109,7 +103,7 @@ const MainLabel = () => {
                         >
                             <Image
                                 alt="alt"
-                                src={"/landing/Knowledge.svg"}
+                                src="/assets/landing/Knowledge.svg"
                                 quality={100}
                                 width={256}
                                 height={256}
@@ -127,36 +121,36 @@ const MainLabel = () => {
                             <Button
                                 onClick={() => {
                                     router.push({
-                                        pathname: '/registration',
-                                    })
+                                        pathname: "/registration",
+                                    });
                                 }}
                                 sx={{
-                                    '&.MuiButton-root': {
-                                        width: '272px',
-                                        height: '60px',
-                                        color: 'text.main',
-                                        bgcolor: 'primary.main',
-                                        borderRadius: '88px',
+                                    "&.MuiButton-root": {
+                                        width: "272px",
+                                        height: "60px",
+                                        color: "text.main",
+                                        bgcolor: "primary.main",
+                                        borderRadius: "88px",
                                         boxShadow: 24,
-                                        '&:hover': {
-                                            bgcolor: 'primary.main',
+                                        "&:hover": {
+                                            bgcolor: "primary.main",
                                         },
                                     },
-                                    mt: '20px',
-                                    mb: '20px',
+                                    mt: "20px",
+                                    mb: "20px",
                                 }}
                             >
                                 <Typography
                                     sx={{
-                                        '&.MuiTypography-root': {
-                                            fontFamily: 'Open Sans, sans-serif',
-                                            fontStyle: 'normal',
+                                        "&.MuiTypography-root": {
+                                            fontFamily: "Open Sans, sans-serif",
+                                            fontStyle: "normal",
                                             fontWeight: 600,
-                                            fontSize: '18px',
-                                            lineHeight: '25px',
+                                            fontSize: "18px",
+                                            lineHeight: "25px",
                                         },
-                                        ml: '32px',
-                                        color: 'text.primary',
+                                        ml: "32px",
+                                        color: "text.primary",
                                     }}
                                 >
                                     {labels.enterButton}
@@ -170,9 +164,9 @@ const MainLabel = () => {
                                         bgcolor: "secondary.main",
                                         height: "46px",
                                         width: "46px",
-                                        borderRadius: '50%',
-                                        ml: 'auto',
-                                        mr: '0px',
+                                        borderRadius: "50%",
+                                        ml: "auto",
+                                        mr: "0px",
                                     }}
                                 >
                                     <ArrowForwardIcon />
@@ -190,99 +184,13 @@ const MainLabel = () => {
                         >
                             <Image
                                 alt="alt"
-                                src={"/landing/OnlineLearning.svg"}
+                                src="/assets/landing/OnlineLearning.svg"
                                 quality={100}
                                 width={256}
                                 height={256}
                             />
                         </Grid>
                     </Grid>
-                    {/* {mobile && <Stack
-                        direction="row"
-                        justifyContent="flex-end"
-                        alignItems="center"
-                        sx={{
-                            width: '100%'
-                        }}
-                    >
-                        <Image
-                            alt="alt"
-                            src={"/landing/Knowledge.svg"}
-                            quality={100}
-                            width={256}
-                            height={256}
-                        />
-                    </Stack >} */}
-                    {/* {<Button
-                        onClick={() => {
-                            router.push({
-                                pathname: '/registration',
-                            })
-                        }}
-                        sx={{
-                            '&.MuiButton-root': {
-                                width: '272px',
-                                height: '60px',
-                                color: 'text.main',
-                                bgcolor: 'primary.main',
-                                borderRadius: '88px',
-                                boxShadow: 24,
-                                '&:hover': {
-                                    bgcolor: 'primary.main',
-                                },
-                            },
-                            mt: mobile ? '20px' : '90px',
-                            mb: '20px',
-                        }}
-                    >
-                        <Typography
-                            sx={{
-                                '&.MuiTypography-root': {
-                                    fontFamily: 'Open Sans, sans-serif',
-                                    fontStyle: 'normal',
-                                    fontWeight: 600,
-                                    fontSize: '18px',
-                                    lineHeight: '25px',
-                                },
-                                ml: '32px',
-                                color: 'text.primary',
-                            }}
-                        >
-                            {labels.enterButton}
-                        </Typography>
-                        <Stack
-                            direction="column"
-                            justifyContent="center"
-                            alignItems="center"
-                            sx={{
-                                color: "text.primary",
-                                bgcolor: "secondary.main",
-                                height: "46px",
-                                width: "46px",
-                                borderRadius: '50%',
-                                ml: 'auto',
-                                mr: '0px',
-                            }}
-                        >
-                            <ArrowForwardIcon />
-                        </Stack>
-                    </Button>}
-                    {mobile && <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        sx={{
-                            width: '100%'
-                        }}
-                    >
-                        <Image
-                            alt="alt"
-                            src={"/landing/OnlineLearning.svg"}
-                            quality={100}
-                            width={256}
-                            height={256}
-                        />
-                    </Stack >} */}
                 </Stack >
             </Paper>
 
@@ -291,4 +199,4 @@ const MainLabel = () => {
     );
 }
 
-export default MainLabel
+export default MainLabel;

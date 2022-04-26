@@ -1,13 +1,11 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 
 import {
   Grid,
-  useTheme,
-  TextField,
   Tooltip,
   Button,
   Box,
-  IconButton,
 } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -16,16 +14,17 @@ import { inject, observer } from "mobx-react";
 import { useCopyToClipboard } from "react-use";
 import QRCode from "react-qr-code";
 
+import TextFieldCustom from "kit/TextFieldCustom";
+
 const Invite = inject(
   "rootStore",
-  "settingsStore"
+  "userSt"
 )(
-  observer(({ rootStore, settingsStore }) => {
-    const theme = useTheme();
+  observer(({ rootStore, userSt }) => {
 
-    //Используется тестовый код, нужно заменить значение из API
+    // Используется тестовый код, нужно заменить значение из API
     const [statusCopy, setStatusCopy] = useState(false);
-    const [openQR, setOpenQR] = React.useState(false)
+    const [openQR, setOpenQR] = React.useState(false);
 
     const [state, copyToClipboard] = useCopyToClipboard();
 
@@ -46,19 +45,19 @@ const Invite = inject(
               : "Кликните чтобы скопировать ссылку"
           }
         >
-          <TextField
+          <TextFieldCustom
+            fullWidth
             id="invite-code"
             label="Код-приглашение"
-            defaultValue={settingsStore.settings.invite}
-            // value={settingsStore.settings.invite}
+            defaultValue={`https://xieffect.ru/registration?invite=${userSt.settings.invite}`}
             onClick={() => {
-              copyToClipboard("https://xieffect.netlify.app/registration?invite=" + settingsStore.settings.invite)
-              setStatusCopy(true)
+              copyToClipboard(`https://xieffect.ru/registration?invite=${userSt.settings.invite}`);
+              setStatusCopy(true);
             }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <Button sx={{ color: 'text.primary' }}>
+                  <Button sx={{ color: "text.primary" }}>
                     <ContentCopyIcon />
                   </Button>
                 </InputAdornment>
@@ -71,7 +70,7 @@ const Invite = inject(
             }}
           />
         </Tooltip>
-        <Button sx={{ m: 1 }} onClick={() => setOpenQR(true)} variant="contained">
+        <Button sx={{ mt: 1 }} onClick={() => setOpenQR(true)} variant="contained">
           Сгенерировать QR-код для ссылки-приглашения
         </Button>
         {openQR &&
@@ -82,7 +81,7 @@ const Invite = inject(
               height: 256,
             }}
           >
-            <QRCode value={"https://xieffect.netlify.app/registration?invite=" + settingsStore.settings.invite} />
+            <QRCode value={`https://xieffect.netlify.app/registration?invite=${userSt.settings.invite}`} />
           </Box>}
       </Grid >
     );
